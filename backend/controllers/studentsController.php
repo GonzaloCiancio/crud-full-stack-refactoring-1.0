@@ -31,6 +31,17 @@ function handlePost($conn)
 {
     $input = json_decode(file_get_contents("php://input"), true);
 
+    $email = $conn->real_escape_string($input['email']);
+
+    // Verificar si el email ya existe antes de insertar
+    $check = checkEmailExists($conn, $email);
+
+    if ($check && $check->num_rows > 0) {
+        http_response_code(400);
+        echo json_encode(["error" => "El email ya está registrado"]);
+        exit;
+    }
+    // Si no existe, crear el estudiante
     $result = createStudent($conn, $input['fullname'], $input['email'], $input['age']);
     if ($result['inserted'] > 0) 
     {

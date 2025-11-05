@@ -41,7 +41,7 @@ $module = $query_array['module'] ?? null;
 if (!$module)
 {
     sendCodeMessage(400, "Módulo no especificado");
-}
+} 
 
 // Validación de caracteres seguros: solo letras, números y guiones bajos
 if (!preg_match('/^\w+$/', $module))

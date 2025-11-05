@@ -11,7 +11,7 @@
 export function createAPI(moduleName, config = {}) 
 {
     const API_URL = config.urlOverride ?? `../../backend/server.php?module=${moduleName}`;
-
+    
     async function sendJSON(method, data) 
     {
         const res = await fetch(API_URL,
@@ -21,7 +21,14 @@ export function createAPI(moduleName, config = {})
             body: JSON.stringify(data)
         });
 
-        if (!res.ok) throw new Error(`Error en ${method}`);
+         if (!res.ok) {
+        // 1. Leemos el cuerpo de la respuesta para obtener el mensaje de error específico
+        const errorData = await res.json();
+        
+        // 2. Lanzamos un error con el mensaje del backend.
+        //    Si por alguna razón no hay un mensaje en errorData.error, usamos uno genérico.
+        throw new Error(errorData.error || `Error en ${method}`);
+    }
         return await res.json();
     }
 

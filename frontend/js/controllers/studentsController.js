@@ -24,23 +24,26 @@ function setupFormHandler()
     {
         e.preventDefault();
         const student = getFormData();
-    
+
         try 
         {
-            if (student.id) 
-            {
+            if (student.id) {
                 await studentsAPI.update(student);
-            } 
-            else 
-            {
+            } else {
                 await studentsAPI.create(student);
+                
             }
+
             clearForm();
             loadStudents();
         }
         catch (err)
         {
-            console.error(err.message);
+            if (err.message == "El email ya está registrado"){
+                alert("El email ya está registrado");
+            } else {
+                console.error(err.message);
+            }
         }
     });
 }

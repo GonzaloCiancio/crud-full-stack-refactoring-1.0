@@ -28,6 +28,11 @@ function getStudentById($conn, $id)
     return $result->fetch_assoc(); 
 }
 
+function checkEmailExists($conexion, $email) {
+    $sql = "SELECT email FROM students WHERE email='$email'";
+    return $conexion->query($sql);
+}
+
 function createStudent($conn, $fullname, $email, $age) 
 {
     $sql = "INSERT INTO students (fullname, email, age) VALUES (?, ?, ?)";
