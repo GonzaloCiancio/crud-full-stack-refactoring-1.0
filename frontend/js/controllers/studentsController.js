@@ -41,6 +41,8 @@ function setupFormHandler()
         {
             if (err.message == "El email ya está registrado"){
                 alert("El email ya está registrado");
+            } else if (err.message == "El email ya está registrado por otro estudiante") {
+                alert("El email ya está registrado por otro estudiante");
             } else {
                 console.error(err.message);
             }

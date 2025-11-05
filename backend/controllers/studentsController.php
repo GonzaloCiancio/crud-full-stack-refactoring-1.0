@@ -58,6 +58,20 @@ function handlePut($conn)
 {
     $input = json_decode(file_get_contents("php://input"), true);
 
+    $email = $conn->real_escape_string($input['email']);
+
+    $check = checkEmailExists($conn, $email);
+    // no utilizo un bucle ya que no tendria que haber mas de un email igual, ya que la creacion lo impide
+    if ($check && $check->num_rows > 0)  {
+        $existingStudent = $check->fetch_assoc();
+        if ($existingStudent['id'] != $input['id']) {
+            http_response_code(400);
+            echo json_encode(["error" => "El email ya está registrado por otro estudiante"]);
+            exit;
+        }
+    }
+
+
     $result = updateStudent($conn, $input['id'], $input['fullname'], $input['email'], $input['age']);
     if ($result['updated'] > 0) 
     {
